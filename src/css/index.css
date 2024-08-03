@@ -28,4 +28,74 @@ html {
   font-family: "Roboto", sans-serif;
   font-weight: 900;
   font-style: normal;
+}
+
+#main_section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+#main_section h2 {
+  font-size: 50px;
+  margin: 0;
+}
+#main_section .weather-section {
+  display: flex;
+  justify-content: space-around;
+}
+#main_section .weather-section .weather-and-temp {
+  display: flex;
+  gap: 20px;
+  background-color: #eee;
+  border-radius: 10px;
+  padding: 10px;
+}
+#main_section .weather-section .weather-and-temp .weather-icon {
+  width: 200px;
+  height: 200px;
+}
+#main_section .weather-section .weather-and-temp .temp {
+  font-size: 200px;
+  margin: 0;
+}
+#main_section .weather-section .details {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  gap: 20px;
+}
+#main_section .weather-section .details .col {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  background-color: #eee;
+  border-radius: 10px;
+  padding: 10px;
+}
+#main_section .weather-section .details .col img {
+  width: 50px;
+  height: 50px;
+}
+#main_section .weather-section .details .col p {
+  margin: 0;
+}
+
+@media only screen and (max-width: 600px) {
+  #main_section h2 {
+    text-align: center;
+  }
+  #main_section .weather-section {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+  #main_section .weather-section .weather-and-temp .weather-icon {
+    display: none;
+  }
+  #main_section .weather-section .details {
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+  }
 }/*# sourceMappingURL=index.css.map */

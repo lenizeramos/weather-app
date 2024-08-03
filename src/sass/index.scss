@@ -29,3 +29,87 @@ html {
   font-weight: 900;
   font-style: normal;
 }
+
+#main_section{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+    h2{
+    font-size: 50px;
+    margin: 0;
+  }
+  .weather-section{
+    display: flex;
+    justify-content: space-around;
+
+    .weather-and-temp{
+      display: flex;
+      gap: 20px;
+      background-color: #eee;
+      border-radius: 10px;
+      padding: 10px;
+
+      .weather-icon{
+        width: 200px;
+        height: 200px;
+      } 
+  
+      .temp{
+        font-size: 200px;
+        margin: 0;
+      }
+    }
+
+    .details{
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      gap: 20px;
+
+      .col{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
+        background-color: #eee;
+        border-radius: 10px;
+        padding: 10px;
+
+        img{
+          width: 50px;
+          height: 50px;
+        }
+        p{
+          margin: 0;
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 600px){
+  #main_section{
+    h2{
+      text-align: center;
+    }
+    .weather-section{
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+
+      .weather-and-temp{
+        .weather-icon{
+          display: none;
+        }
+      }
+
+      .details{
+        flex-direction: row;
+        justify-content: space-around;
+        width: 100%;
+      }
+    }
+  }
+}
+

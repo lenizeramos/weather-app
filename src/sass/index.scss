@@ -29,3 +29,9 @@ html {
   font-weight: 900;
   font-style: normal;
 }
+
+.selector-section {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}

@@ -110,13 +110,27 @@ html {
   margin: 0;
 }
 #daily_section div img {
-  width: 80px;
-  height: 80px;
+  width: 60px;
+  height: 60px;
   margin: 10px 0;
 }
-#daily_section div p {
-  font-size: 50px;
+#daily_section div .max-min-temp {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0;
+}
+#daily_section div .max-min-temp p {
+  font-size: 15px;
   margin: 0;
+}
+#daily_section div .max-min-temp img {
+  transform: rotate(90deg);
+  width: 30px;
+  height: 30px;
+  margin: 0 5px;
 }
 
 @media only screen and (max-width: 600px) {

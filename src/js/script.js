@@ -134,9 +134,10 @@ function getUserCurrentLocation() {
 
           getCityFromCoordinates(obj.latitude, obj.longitude).then((city) => {
             obj.name = city.city;
+            obj.stateCode = city.stateCode
             obj.countryCode = city.country_code.toUpperCase();
-            console.log(city);
-            console.log(obj);
+            // console.log(city);
+            // console.log(obj);
             result(obj);
           });
         },
@@ -171,6 +172,10 @@ async function weatherRequest(obj) {
   let favorite = document.getElementById("favorite");
 
   cityName.textContent = obj.name;
+
+  favorite.addEventListener("click", () => {
+    favorite.classList.toggle("favorited");
+  })
 
   const requestOptions = {
     method: "GET",

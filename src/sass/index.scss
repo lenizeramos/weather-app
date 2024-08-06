@@ -30,8 +30,72 @@ html {
   font-style: normal;
 }
 
+// BEGIN SELECTOR-SECTION
+$borderColorSelector: #ccc;
+$hoverBgColorSelector: #ddd;
+$backgroundColorSelector: #fff;
+
 .selector-section {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
 }
+
+.container-favourite-cities {
+  height: 500px;
+  width: 20%;
+
+  .select-cities {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid $borderColorSelector;
+    border-radius: 4px;
+    background-color: $backgroundColorSelector;
+
+    .select-city {
+      padding: 10px;
+      cursor: pointer;
+
+      &:hover {
+        background-color: $hoverBgColorSelector;
+      }
+    }
+  }
+}
+
+.container-autocomplete {
+  position: relative;
+  height: 500px;
+  width: 20%;
+
+  .autocomplete-input {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid $borderColorSelector;
+    border-radius: 4px;
+    background-color: $backgroundColorSelector;
+  }
+
+  .autocomplete-cities {
+    position: absolute;
+    border: 1px solid $hoverBgColorSelector;
+    border-top: none;
+    z-index: 99;
+    background-color: $backgroundColorSelector;
+    max-height: fit-content;
+    width: 100%;
+
+    .autocomplete-city {
+      padding: 10px;
+      border: none;
+      cursor: pointer;
+
+      &:hover {
+        background-color: $hoverBgColorSelector;
+      }
+    }
+  }
+}
+// END SELECTOR-SECTION

@@ -20,13 +20,13 @@ function main() {
         if (filteredCities.length === 0) {
           const noResultsDiv = document.createElement("div");
           noResultsDiv.textContent = "No results found";
-          //noResultsDiv.classList.add("autocomplete-city");
+          noResultsDiv.classList.add("autocomplete-city");
           autocompleteCities.appendChild(noResultsDiv);
         } else {
           filteredCities.forEach((city) => {
             const div = document.createElement("div");
             div.textContent = city.formattedAddress;
-            // div.classList.add("autocomplete-city");
+            div.classList.add("autocomplete-city");
             div.addEventListener("click", () => {
               autocompleteInput.value = city.formattedAddress;
               latitude.value = city.latitude;
@@ -38,6 +38,12 @@ function main() {
         }
         isSearching = false;
       });
+    }
+  });
+
+  document.addEventListener("click", (e) => {
+    if (e.target !== autocompleteInput) {
+      autocompleteCities.innerHTML = "";
     }
   });
 

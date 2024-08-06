@@ -148,11 +148,17 @@ html {
   #main_section .weather-section .weather-and-temp .weather-icon {
     display: none;
   }
+  #main_section .weather-section .weather-and-temp h1 {
+    font-size: 120px !important;
+  }
   #main_section .weather-section .details {
     width: 95%;
     gap: 10px;
   }
   #main_section .weather-section .details .col:nth-child(3), #main_section .weather-section .details .col:nth-child(4) {
     display: none;
+  }
+  #daily_section {
+    flex-direction: row;
   }
 }/*# sourceMappingURL=index.css.map */

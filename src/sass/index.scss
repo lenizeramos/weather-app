@@ -5,6 +5,15 @@ html {
   box-sizing: border-box;
   overflow-x: hidden;
 }
+.d-flex {
+  display: flex;
+}
+.flex-column {
+  flex-direction: column;
+}
+.w-100 {
+  width: 100% !important;
+}
 .roboto-regular {
   font-family: "Roboto", sans-serif;
   font-weight: 400;
@@ -24,6 +33,12 @@ html {
   font-family: "Roboto", sans-serif;
   font-weight: 900;
   font-style: normal;
+}
+
+.selector-section {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
 }
 #main_section{
   display: flex;
@@ -172,3 +187,33 @@ html {
   }
 }
 
+.daily-title {
+  margin-top: 70px;
+}
+
+#hourly_section {
+  margin-top: 40px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+
+  .hourly_container {
+    width: 100%;
+    gap: 10px;
+    justify-content: space-around;
+    position: relative;
+
+    div div {
+      height: 170px;
+      width: 170px;
+      border: solid black 2px;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      gap: 10px;
+    }
+  }
+}

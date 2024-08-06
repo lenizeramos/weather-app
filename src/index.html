@@ -14,7 +14,28 @@
   </head>
   <body>
     <main>
-      <section id="selector_section"></section>
+      <section id="selector_section" class="selector-section">
+        <div class="container-favourite-cities">
+          <select id="select_cities" class="select-cities">
+            <option value="default">Favorite cities</option>
+            <option value="option1">Option 1</option>
+            <option value="option2">Option 2</option>
+            <option value="option3">Option 3</option>
+          </select>
+        </div>
+        <div class="container-autocomplete">
+          <input
+            type="text"
+            id="autocomplete_input"
+            placeholder="Search city"
+            autocomplete="off"
+          />
+          <input type="hidden" id="latitude" value="49.2819">
+          <input type="hidden" id="longitude" value="-123.11874">
+          <div id="autocomplete_cities" class="autocomplete-cities"></div>
+        </div>
+      </section>
+
       <section id="main_section">
         <div class="city-location">
           <h2 class="city">Vancouver</h2>
@@ -58,7 +79,10 @@
         </div>
       </section>
 
-      <section id="daily_section">
+      <div class="w-100">
+        <h2 class="daily-title">Daily Forecast</h2>
+      </div>
+      <section id="daily_section">        
         <div>
           <h3 id="first_date_weather"></h3>
           <img id="first_weather_img" src="" alt="">
@@ -105,8 +129,30 @@
           </div>
         </div>
       </section>
-      <section id="hour_section"></section>
+
+      <section id="hourly_section" class="d-flex flex-column">
+        <div class="w-100">
+          <h2>Today's Hourly Forecast</h2>
+        </div>
+        <div class="d-flex hourly_container" id="hourly_container">
+          <div>
+            <p>0:00 am - 3:00 am</p>
+            <img src="media/images/cloudy.png" width="50px" height="50px" alt="">
+            <p>14.4°C - 18.4°C</p>
+          </div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </section>
+
     </main>
+
+
     <script src="https://kit.fontawesome.com/fb82f48818.js"crossorigin="anonymous"></script>
     <script src="js/script.js"></script>
   </body>

@@ -125,6 +125,7 @@ async function weatherRequest (obj){
     .then((response) => response.text())
     .then((result) => {
         var result = JSON.parse(result);
+
         let tempH1 = document.getElementById("tempH1");
         tempH1.innerHTML = result.current.temperature_2m + "°C";
         let humidity = document.getElementById("humidity");
@@ -134,9 +135,11 @@ async function weatherRequest (obj){
         let highTemperature = document.getElementById("high_temperature");
         highTemperature.innerHTML = result.current.
         apparent_temperature + "°C";
-        let timeWeather = document.getElementById("time_weather");
-        timeWeather.innerHTML = result.current.rain;
-
+        let timeWeatherMax = document.getElementById("time_weather_max");
+        timeWeatherMax.innerHTML = result.current.rain;
+        let weatherIcon = document.getElementById("weather_icon");
+        weatherIcon.src= getImgAndVideoWheather(result.current.weather_code[0]);
+        console.log(result);
         const dates = result.daily.time;
         const days = dates.map(date =>{
             const day = new Date(date).toLocaleDateString("en-US",{weekday: "long"});
@@ -307,6 +310,8 @@ function getImgAndVideoWheather(value){
   
     return finalObj.image;
 }
+
+
 
 
 

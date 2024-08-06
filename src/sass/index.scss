@@ -63,6 +63,7 @@ html {
 
     .weather-and-temp{
       display: flex;
+      align-items: center;
       gap: 20px;
       background-color: #eee;
       border-radius: 10px;
@@ -101,6 +102,12 @@ html {
         p{
           margin: 0;
         }
+        div{
+          div{
+            display: flex;
+            justify-content: space-between;
+          }
+        }
       }
     }
   }
@@ -109,7 +116,6 @@ html {
   display: flex;
   justify-content: space-around;
   width: 100%;
-  margin-top: 40px;
   div{
     display: flex;
     flex-direction: column;
@@ -148,6 +154,9 @@ html {
   }
 }
 @media only screen and (max-width: 600px){
+  .daily-title{
+    font-size: 30px !important;
+  }
   #main_section{
     .city-location{
       display: flex;
@@ -172,7 +181,7 @@ html {
       .details{
         width: 95%;
         gap: 10px;
-        .col:nth-child(3), .col:nth-child(4){
+        .col:nth-child(2), .col:nth-child(4){
           display: none;
         }
       }
@@ -180,15 +189,17 @@ html {
   }
 
   #daily_section{
-    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 5px;
     div{
-
     }
   }
 }
 
 .daily-title {
-  margin-top: 70px;
+  font-size: 50px;
+  margin-left: 10px;
 }
 
 #hourly_section {

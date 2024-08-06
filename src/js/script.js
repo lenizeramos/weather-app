@@ -1,16 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
   let latitude = document.getElementById("latitude");
   let longitude = document.getElementById("longitude");
+  var obj = {};
 
-  getUserCurrentLocation();
-
-  let obj = {
-        latitude: 49.2819,
-        longitude: -123.11874,
-        name: "Vancouver"
-    };
-
-  weatherRequest(obj);
+  getUserCurrentLocation().then((obj) => {
+    weatherRequest(obj);
+  }).catch((error)=>console.log(error));
 
   main();
 });
@@ -26,7 +21,7 @@ function main() {
     if (city.length > 2 && !isSearching) {
       isSearching = true;
       fetchAutocompleteRadarApi(city, 10).then((filteredCities) => {
-        console.log(filteredCities);
+
         if (filteredCities.length === 0) {
           const noResultsDiv = document.createElement("div");
           noResultsDiv.textContent = "No results found";
@@ -38,10 +33,17 @@ function main() {
             div.textContent = city.formattedAddress;
             // div.classList.add("autocomplete-city");
             div.addEventListener("click", () => {
-              autocompleteInput.value = city.formattedAddress;
-              latitude.value = city.latitude;
-              longitude.value = city.longitude;
+
+              obj = {
+                name: city.formattedAddress,
+                latitude: city.latitude,
+                longitude: city.longitude
+              }
+
               autocompleteCities.innerHTML = "";
+
+              weatherRequest(obj);
+
             });
             autocompleteCities.appendChild(div);
           });
@@ -76,24 +78,40 @@ function main() {
   }
 }
 
+
 function getUserCurrentLocation() {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        latitude.value = position.coords.latitude;
-        longitude.value = position.coords.longitude;
-      },
-      (error) => {
-        console.error("Error getting location: ", error.message);
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 5000,
-        maximumAge: 0,
-      }
-    );
-  }
-}    
+  return new Promise((result, reject) => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          obj = {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            name: "Vancouver"
+          }      
+          result(obj);  
+          
+        },
+        (error) => {
+          reject(new Error("Error getting location: " + error.message));
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 5000,
+          maximumAge: 0,
+        }
+      );
+    }else{
+      obj = {
+          latitude: 49.2819,
+          longitude: -123.11874,
+          name: "Vancouver"
+      };
+      result(obj);
+    }
+  });
+  
+}
     
 async function weatherRequest (obj){
     let latitude = obj.latitude;
@@ -185,12 +203,47 @@ async function weatherRequest (obj){
         let fifthDateWeather = document.getElementById("fifth_date_weather");
         fifthDateWeather.innerHTML = days[6];
 
+
+        var hourlyContainer = document.getElementById('hourly_container');
+        hourlyContainer.innerHTML = "";
+
+        for(let i = 0; i < 24; i++) {
+                            
+            var temp = result.hourly.temperature_2m[i];             
+            var newdiv = document.createElement('div');            
+            
+            var day = document.createElement('h4');
+            day.innerHTML = result.hourly.time[i].split("T")[1];
+            day.classList.add("black-background");
+
+            var dayImage = document.createElement('img');
+            dayImage.width = 50;
+            dayImage.height = 50;
+            dayImageFunction = getImgAndVideoWheather(result.hourly.weather_code[i]);
+
+            dayImage.src = dayImageFunction;
+
+            var p = document.createElement('p');
+            p.innerHTML = temp+" °C";
+            p.classList.add("black-background");
+
+            var divContainer = document.createElement('div');
+            divContainer.setAttribute("style", "max-width: 100px;");
+            divContainer.append(day);
+            divContainer.append(dayImage);
+            divContainer.append(p);
+            newdiv.append(divContainer);
+            hourlyContainer.append(newdiv);
+            i = i+2;
+        }
+
     })
     .catch((error) => console.error(error));
 }
 
 function getImgAndVideoWheather(value){
-    switch(value){
+
+  switch(value){
         case 0:
             var image = "media/images/sun.png";
             break;
@@ -206,7 +259,7 @@ function getImgAndVideoWheather(value){
         case 51:
         case 53:
         case 55:
-            var image = "media/images/cloudy (3).png";
+            var image = "media/images/cloudy_3.png";
             break;
         case 56:
         case 57:

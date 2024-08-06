@@ -79,7 +79,10 @@
         </div>
       </section>
 
-      <section id="daily_section">
+      <div class="w-100">
+        <h2 class="daily-title">Daily Forecast</h2>
+      </div>
+      <section id="daily_section">        
         <div>
           <h3 id="first_date_weather"></h3>
           <img id="first_weather_img" src="" alt="">
@@ -126,8 +129,30 @@
           </div>
         </div>
       </section>
-      <section id="hour_section"></section>
+
+      <section id="hourly_section" class="d-flex flex-column">
+        <div class="w-100">
+          <h2>Today's Hourly Forecast</h2>
+        </div>
+        <div class="d-flex hourly_container" id="hourly_container">
+          <div>
+            <p>0:00 am - 3:00 am</p>
+            <img src="media/images/cloudy.png" width="50px" height="50px" alt="">
+            <p>14.4°C - 18.4°C</p>
+          </div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </section>
+
     </main>
+
+
     <script src="https://kit.fontawesome.com/fb82f48818.js"crossorigin="anonymous"></script>
     <script src="js/script.js"></script>
   </body>

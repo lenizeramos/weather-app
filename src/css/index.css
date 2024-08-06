@@ -48,6 +48,55 @@ html {
   justify-content: space-around;
 }
 
+.container-favourite-cities {
+  width: 20%;
+}
+.container-favourite-cities .select-cities {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+}
+.container-favourite-cities .select-cities .select-city {
+  padding: 10px;
+  cursor: pointer;
+}
+.container-favourite-cities .select-cities .select-city:hover {
+  background-color: #ddd;
+}
+
+.container-autocomplete {
+  position: relative;
+  width: 20%;
+}
+.container-autocomplete .autocomplete-input {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+}
+.container-autocomplete .autocomplete-cities {
+  position: absolute;
+  border: 1px solid #ddd;
+  border-top: none;
+  z-index: 99;
+  background-color: #fff;
+  max-height: fit-content;
+  width: 100%;
+}
+.container-autocomplete .autocomplete-cities .autocomplete-city {
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+}
+.container-autocomplete .autocomplete-cities .autocomplete-city:hover {
+  background-color: #ddd;
+}
+
 #main_section {
   display: flex;
   flex-direction: column;
@@ -155,40 +204,6 @@ html {
   margin: 0 5px;
 }
 
-@media only screen and (max-width: 600px) {
-  .daily-title {
-    font-size: 30px !important;
-  }
-  #main_section .city-location {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-left: 0%;
-  }
-  #main_section .weather-section {
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-  }
-  #main_section .weather-section .weather-and-temp .weather-icon {
-    display: none;
-  }
-  #main_section .weather-section .weather-and-temp h1 {
-    font-size: 120px !important;
-  }
-  #main_section .weather-section .details {
-    width: 95%;
-    gap: 10px;
-  }
-  #main_section .weather-section .details .col:nth-child(2), #main_section .weather-section .details .col:nth-child(4) {
-    display: none;
-  }
-  #daily_section {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    gap: 5px;
-  }
-}
 .daily-title {
   font-size: 50px;
   margin-left: 10px;
@@ -217,4 +232,44 @@ html {
   justify-content: center;
   padding: 8px;
   gap: 10px;
+}
+
+@media only screen and (max-width: 600px) {
+  .container-favourite-cities,
+  .container-autocomplete {
+    width: 45%;
+  }
+  .daily-title {
+    font-size: 30px !important;
+  }
+  #main_section .city-location {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 0%;
+  }
+  #main_section .weather-section {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+  #main_section .weather-section .weather-and-temp .weather-icon {
+    display: none;
+  }
+  #main_section .weather-section .weather-and-temp h1 {
+    font-size: 120px !important;
+  }
+  #main_section .weather-section .details {
+    width: 95%;
+    gap: 10px;
+  }
+  #main_section .weather-section .details .col:nth-child(2),
+  #main_section .weather-section .details .col:nth-child(4) {
+    display: none;
+  }
+  #daily_section {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 5px;
+  }
 }/*# sourceMappingURL=index.css.map */

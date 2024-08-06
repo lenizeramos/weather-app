@@ -4,6 +4,7 @@ html {
   padding: 0;
   box-sizing: border-box;
   overflow-x: hidden;
+  background: linear-gradient(45deg, #0E1E52 0%, #081E64 55%, #171D33 100%);
 }
 .d-flex {
   display: flex;
@@ -13,6 +14,21 @@ html {
 }
 .w-100 {
   width: 100% !important;
+}
+.text-white {
+  color: white;
+}
+.align-items-center {
+  align-items: center;
+}
+.justify-content-center {
+  justify-content: center;
+}
+.mb-0 {
+  margin-bottom: 0;
+}
+.mt-0 {
+  margin-top: 0;
 }
 .roboto-regular {
   font-family: "Roboto", sans-serif;
@@ -35,6 +51,75 @@ html {
   font-style: normal;
 }
 
+.glass-card {  
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  padding: 20px;
+  color: #fff;
+  font-family: Arial, sans-serif;
+}
+
+nav {
+  height: 60px;
+  background-color: #081E64;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+
+  .logo {
+    font-size: 36px;
+    color: white;
+    font-weight: 600;
+  }
+
+  .temperature-container {
+    width: 60%;
+    color: white;
+    font-size: 20px;
+    display: flex;
+    justify-content: space-between;
+
+    .today-temperature {
+      width: 10%;
+      text-align: end;
+    }
+  }
+
+  .current-temperatures-container {
+    position: relative;
+    overflow: hidden;
+    width: 85%;
+    display: flex;
+    align-items: end;
+
+
+    .current-temperatures {
+      position: absolute;
+      font-size: 17px;
+      white-space: nowrap;
+      animation: marquee 1000s linear infinite;
+    }
+  }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(100px);
+  }
+
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+main {
+  margin-top:20px;
+}
+
 // BEGIN SELECTOR-SECTION
 $borderColorSelector: #ccc;
 $hoverBgColorSelector: #ddd;
@@ -43,7 +128,9 @@ $backgroundColorSelector: #fff;
 .selector-section {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-between;
+  margin-right: 40px;
+  margin-left: 40px;
 }
 
 .container-favourite-cities {
@@ -106,11 +193,23 @@ $backgroundColorSelector: #fff;
 #main_section {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   gap: 20px;
+
   .city-location {
     display: flex;
     align-items: center;
-    margin-left: 10%;
+    position: relative;
+    width: 400px;
+    height: 200px;
+    
+    .favorite-star {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+    }
+
     h2 {
       font-size: 50px;
       margin: 0;
@@ -120,28 +219,38 @@ $backgroundColorSelector: #fff;
       font-size: 30px;
     }
   }
-  .weather-section {
-    display: flex;
-    justify-content: space-around;
+
+  .weather-main-container {
+    gap: 38px;
 
     .weather-and-temp {
       display: flex;
+      justify-content: center;
       align-items: center;
-      gap: 20px;
-      background-color: #eee;
-      border-radius: 10px;
-      padding: 10px;
-
-      .weather-icon {
-        width: 200px;
-        height: 200px;
-      }
-
-      .temp {
-        font-size: 200px;
-        margin: 0;
-      }
+      flex-direction: column;
     }
+  
+    .temp {
+      text-align: center;
+      font-size: 40px;
+      margin-top: 0;
+    }
+
+    p {
+      font-size: 16px;
+    }
+
+    .main-data {
+      gap:20px;
+    }
+
+    .container-carc {
+      gap: 20px;
+    }
+
+  }
+
+    
 
     .details {
       display: grid;
@@ -173,20 +282,19 @@ $backgroundColorSelector: #fff;
         }
       }
     }
-  }
+  
 }
 #daily_section {
   display: flex;
   justify-content: space-around;
   width: 100%;
+  
   div {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #eee;
-    border-radius: 10px;
-    padding: 20px;
+
     h3 {
       font-size: 20px;
       margin: 0;
@@ -217,9 +325,11 @@ $backgroundColorSelector: #fff;
   }
 }
 
-.daily-title {
-  font-size: 50px;
+.daily-title, .hourly-title {
+  font-size: 32px;
   margin-left: 10px;
+  color: white;
+  margin-left: 40px;
 }
 
 #hourly_section {
@@ -227,6 +337,7 @@ $backgroundColorSelector: #fff;
   display: flex;
   align-items: center;
   width: 100%;
+  margin-bottom: 50px;
 
   .hourly_container {
     width: 100%;
@@ -237,7 +348,6 @@ $backgroundColorSelector: #fff;
     div div {
       height: 170px;
       width: 170px;
-      border: solid black 2px;
       border-radius: 12px;
       display: flex;
       flex-direction: column;
@@ -263,6 +373,12 @@ $backgroundColorSelector: #fff;
       align-items: center;
       justify-content: center;
       margin-left: 0%;
+      position: relative;
+
+      .favorite-star {
+        position: absolute;
+        top: 20px;
+      }
     }
     .weather-section {
       flex-direction: column;

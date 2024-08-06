@@ -13,6 +13,21 @@
     />
   </head>
   <body>
+    <header>
+      <nav class="d-flex">
+        <div class="logo">
+          The Weather App
+        </div>
+        <div class="d-flex temperature-container">
+          <div class="today-temperature">
+            Today temperature:
+          </div>
+          <div class="current-temperatures-container">
+            <div class="current-temperatures" id="current_temperatures">Bancouver, BC 5:00pm 20°C</div>
+          </div>
+        </div>
+      </nav>
+    </header>
     <main>
       <section id="selector_section" class="selector-section">
         <div class="container-favourite-cities">
@@ -38,47 +53,50 @@
       </section>
 
       <section id="main_section">
-        <div class="city-location">
+
+        <div class="city-location glass-card flex-column">
+          <i class="fa-regular fa-star favorite-star" style="color: #FFD43B;"></i>
           <h2 class="city">Vancouver</h2>
-          <i class="fa-solid fa-star" style="color: #FFD43B;"></i>
-        </div>
-        <div class="weather-section">
-          <div class="weather-and-temp">
-            <img class="weather-icon" id="weather_icon" src="" alt="">
-            <h1 class="temp" id="tempH1"></h1>
-          </div>
-          <div class="details">
-            <div class="col">
-              <img src="media/images/humidity.png" alt="">
-              <div>
-                <p>Humidity</p>
-                <p class="humidity" id="humidity"></p>
-              </div>
+          <div class="d-flex weather-main-container">
+            <div class="weather-and-temp">
+              <img id="weather_icon" src="media/images/Sunny_icon.svg" width="90" height="90" alt="icon">
+              <p class="temp text-white" id="tempH1"></p>
             </div>
-            <div class="col">
-              <img src="media/images/storm (1).png" alt="">
-              <div>
-                <p>Wind Speed</p>
-                <p class="wind" id="wind"></p>
-              </div>
-            </div>
-            <div class="col">
-              <img src="media/images/high-temperature.png" alt="">
-              <div>
-                <p>Feel like</p>
-                <p class="high-temperature" id="high_temperature"></p>
-              </div>
-            </div>
-            <div class="col">
-              <img src="media/images/temperature.png" alt="">
-              <div>
-                <p>Min and Max</p>
+
+            <div class="d-flex main-data">
+              <div class="d-flex flex-column container-carc">
                 <div>
-                  <p class="time-weather" id="time_weather_max">0</p>
-                  <p>-</p>
-                  <p class="time-weather" id="time_weather_min">0</p>
+                  <p class="mb-0">Feel like</p>
+                  <div class="d-flex align-items-center">
+                    <img src="media/images/Star_icon.svg" width="30" height="30" alt="icon">
+                    <p class="mb-0 mt-0 high-temperature" id="high_temperature"></p>
+                  </div>
+                </div>
+                <div>
+                  <p class="mb-0">Wind speed</p>
+                  <div class="d-flex align-items-center">
+                    <img src="media/images/Wind_icon.svg" width="30" height="30" alt="icon">
+                    <p class="mt-0 mb-0 wind" id="wind"></p>
+                  </div>
                 </div>
               </div>
+              <div>
+                <p class="mb-0">Min and max</p>
+                <div class="d-flex align-items-center">
+                  <img src="media/images/Sunrise_icon.svg" width="25" height="25" alt="icon">
+                  <p class="mb-0 mt-0 time-weather" id="time_weather_max">0</p>
+                </div>
+                <div class="d-flex align-items-center">
+                  <img src="media/images/Sunset_icon.svg" width="25" height="25" alt="icon">
+                  <p class="mb-0 mt-0 time-weather" id="time_weather_min">0</p>
+                </div>  
+                <p class="mb-0">Humidity</p>
+                <div class="d-flex align-items-center">
+                  <img src="media/images/Rain_icon.svg" width="25" height="25" alt="icon">
+                  <p class="mt-0 mb-0 humidity" id="humidity"></p>
+                </div>
+              </div>
+              <div></div>
             </div>
           </div>
         </div>
@@ -88,7 +106,7 @@
         <h2 class="daily-title">Daily Forecast</h2>
       </div>
       <section id="daily_section">        
-        <div>
+        <div class="glass-card">
           <h3 id="first_date_weather"></h3>
           <img id="first_weather_img" src="" alt="">
           <div class="max-min-temp">
@@ -97,7 +115,7 @@
             <p id="max_first_day"></p>
           </div>
         </div>
-        <div>
+        <div class="glass-card">
           <h3 id="second_date_weather"></h3>
           <img id="second_weather_img" src="" alt="">
           <div class="max-min-temp">
@@ -106,7 +124,7 @@
             <p id="max_second_day"></p>
           </div>
         </div>
-        <div>
+        <div class="glass-card">
           <h3 id="third_date_weather"></h3>
           <img id="third_weather_img" src="" alt="">
           <div class="max-min-temp">
@@ -115,7 +133,7 @@
             <p id="max_third_day"></p>
           </div>
         </div>
-        <div>
+        <div class="glass-card">
           <h3 id="fourth_date_weather"></h3>
           <img id="fourth_weather_img" src="" alt="">
           <div class="max-min-temp">
@@ -124,7 +142,7 @@
             <p id="max_fourth_day"></p>
           </div>
         </div>
-        <div>
+        <div class="glass-card">
           <h3 id="fifth_date_weather"></h3>
           <img id="fifth_weather_img" src="" alt="">
           <div class="max-min-temp">
@@ -137,7 +155,7 @@
 
       <section id="hourly_section" class="d-flex flex-column">
         <div class="w-100">
-          <h2>Today's Hourly Forecast</h2>
+          <h2 class="hourly-title">Today's Hourly Forecast</h2>
         </div>
         <div class="d-flex hourly_container" id="hourly_container">
           <div>

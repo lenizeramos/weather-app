@@ -145,7 +145,7 @@ async function weatherRequest (obj){
         timeWeatherMax.innerHTML = result.current.rain;
         let weatherIcon = document.getElementById("weather_icon");
         weatherIcon.src= getImgAndVideoWheather(result.current.weather_code[0]);
-        console.log(result);
+
         const dates = result.daily.time;
         const days = dates.map(date =>{
             const day = new Date(date).toLocaleDateString("en-US",{weekday: "long"});
@@ -216,14 +216,37 @@ async function weatherRequest (obj){
         var hourlyContainer = document.getElementById('hourly_container');
         hourlyContainer.innerHTML = "";
 
+        var arrayHourly = []; 
+        var current_temperatures = document.getElementById('current_temperatures');
+
+        for (let index = 0; index < result.hourly.temperature_2m.length; index++) {
+            const element = result.hourly.temperature_2m[index];
+            const date = new Date(result.hourly.time[index]);
+            const options = {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+            };
+
+            var humanDate = (date.toLocaleDateString('en-US', options));
+            arrayHourly.push(`Vancouver, BC ${humanDate} ${element}°C"`);
+        }
+        
+        cities = arrayHourly.join(' - ');
+        current_temperatures.innerHTML = cities;
+
         for(let i = 0; i < 24; i++) {
                             
             var temp = result.hourly.temperature_2m[i];             
-            var newdiv = document.createElement('div');            
+            var newdiv = document.createElement('div');  
+                     
             
             var day = document.createElement('h4');
             day.innerHTML = result.hourly.time[i].split("T")[1];
             day.classList.add("black-background");
+            day.setAttribute("style", "margin-bottom:0;");
 
             var dayImage = document.createElement('img');
             dayImage.width = 50;
@@ -235,12 +258,15 @@ async function weatherRequest (obj){
             var p = document.createElement('p');
             p.innerHTML = temp+" °C";
             p.classList.add("black-background");
+            p.setAttribute("style", "font-size: 20px;margin-top:0;margin-bottom:0;");
 
             var divContainer = document.createElement('div');
             divContainer.setAttribute("style", "max-width: 100px;");
-            divContainer.append(day);
+            divContainer.classList.add('glass-card'); 
             divContainer.append(dayImage);
             divContainer.append(p);
+            divContainer.append(day);
+                        
             newdiv.append(divContainer);
             hourlyContainer.append(newdiv);
             i = i+2;
@@ -254,30 +280,30 @@ function getImgAndVideoWheather(value){
 
   switch(value){
         case 0:
-            var image = "media/images/sun.png";
+            var image = "media/images/Sunny_icon.svg";
             break;
         case 1:
         case 2:
         case 3:
-            var image = "media/images/cloudy-day.png";
+            var image = "media/images/Sunny_with_cloud_icon.svg";
             break;
         case 45:
         case 48:
-            var image = "media/images/mist.png";
+            var image = "media/images/Cloudy_icon.svg";
             break;
         case 51:
         case 53:
         case 55:
-            var image = "media/images/cloudy_3.png";
+            var image = "media/images/Sunny_Rain_icon.svg";
             break;
         case 56:
         case 57:
-            var image = "media/images/cloud.png";
+            var image = "media/images/Storm_Cloud_icon.svg";
             break;
         case 61:
         case 63:
         case 65:
-            var image = "media/images/heavy-rain.png";
+            var image = "media/images/Thunder_Storm_icon.svg";
             break;
         case 66:
         case 67:
@@ -303,10 +329,10 @@ function getImgAndVideoWheather(value){
         case 95:
         case 96:
         case 99:
-            var image = "media/images/storm.png";
+            var image = "media/images/Lightning.svg";
             break;
         default:
-            var image = "media/images/sun.png";
+            var image = "media/images/Sunny_icon.svg";
             break;
     }
 

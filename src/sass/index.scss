@@ -46,28 +46,85 @@ $backgroundColorSelector: #fff;
   justify-content: space-around;
 }
 
-#main_section{
+.container-favourite-cities {
+  width: 20%;
+
+  .select-cities {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid $borderColorSelector;
+    border-radius: 4px;
+    background-color: $backgroundColorSelector;
+
+    .select-city {
+      padding: 10px;
+      cursor: pointer;
+
+      &:hover {
+        background-color: $hoverBgColorSelector;
+      }
+    }
+  }
+}
+
+.container-autocomplete {
+  position: relative;
+  width: 20%;
+
+  .autocomplete-input {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid $borderColorSelector;
+    border-radius: 4px;
+    background-color: $backgroundColorSelector;
+  }
+
+  .autocomplete-cities {
+    position: absolute;
+    border: 1px solid $hoverBgColorSelector;
+    border-top: none;
+    z-index: 99;
+    background-color: $backgroundColorSelector;
+    max-height: fit-content;
+    width: 100%;
+
+    .autocomplete-city {
+      padding: 10px;
+      border: none;
+      cursor: pointer;
+
+      &:hover {
+        background-color: $hoverBgColorSelector;
+      }
+    }
+  }
+}
+// END SELECTOR-SECTION
+
+#main_section {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  .city-location{
+  .city-location {
     display: flex;
     align-items: center;
     margin-left: 10%;
-    h2{
+    h2 {
       font-size: 50px;
       margin: 0;
       margin-right: 20px;
     }
-    i{
+    i {
       font-size: 30px;
     }
   }
-  .weather-section{
+  .weather-section {
     display: flex;
     justify-content: space-around;
 
-    .weather-and-temp{
+    .weather-and-temp {
       display: flex;
       align-items: center;
       gap: 20px;
@@ -75,24 +132,24 @@ $backgroundColorSelector: #fff;
       border-radius: 10px;
       padding: 10px;
 
-      .weather-icon{
+      .weather-icon {
         width: 200px;
         height: 200px;
-      } 
-  
-      .temp{
+      }
+
+      .temp {
         font-size: 200px;
         margin: 0;
       }
     }
 
-    .details{
+    .details {
       display: grid;
       grid-template-columns: 1fr 1fr;
       justify-content: space-around;
       gap: 50px;
 
-      .col{
+      .col {
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -101,15 +158,15 @@ $backgroundColorSelector: #fff;
         border-radius: 10px;
         padding: 10px;
 
-        img{
+        img {
           width: 50px;
           height: 50px;
         }
-        p{
+        p {
           margin: 0;
         }
-        div{
-          div{
+        div {
+          div {
             display: flex;
             justify-content: space-between;
           }
@@ -118,11 +175,11 @@ $backgroundColorSelector: #fff;
     }
   }
 }
-#daily_section{
+#daily_section {
   display: flex;
   justify-content: space-around;
   width: 100%;
-  div{
+  div {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -130,75 +187,32 @@ $backgroundColorSelector: #fff;
     background-color: #eee;
     border-radius: 10px;
     padding: 20px;
-    h3{
+    h3 {
       font-size: 20px;
       margin: 0;
     }
-    img{
+    img {
       width: 60px;
       height: 60px;
       margin: 10px 0;
     }
-    .max-min-temp{
+    .max-min-temp {
       display: flex;
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
       width: 100%;
       padding: 0;
-      p{
+      p {
         font-size: 15px;
         margin: 0;
       }
-      img{
+      img {
         transform: rotate(90deg);
         width: 30px;
         height: 30px;
         margin: 0 5px;
       }
-    }
-  }
-}
-@media only screen and (max-width: 600px){
-  .daily-title{
-    font-size: 30px !important;
-  }
-  #main_section{
-    .city-location{
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-left: 0%;
-    }
-    .weather-section{
-      flex-direction: column;
-      align-items: center;
-      gap: 20px;
-
-      .weather-and-temp{
-        .weather-icon{
-          display: none;
-        }
-        h1{
-          font-size: 120px !important;
-        }
-      }
-
-      .details{
-        width: 95%;
-        gap: 10px;
-        .col:nth-child(2), .col:nth-child(4){
-          display: none;
-        }
-      }
-    }
-  }
-
-  #daily_section{
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    gap: 5px;
-    div{
     }
   }
 }
@@ -235,61 +249,51 @@ $backgroundColorSelector: #fff;
   }
 }
 
-.container-favourite-cities {
-  height: 500px;
-  width: 20%;
+@media only screen and (max-width: 600px) {
+  .container-favourite-cities,
+  .container-autocomplete {
+    width: 45%;
+  }
+  .daily-title {
+    font-size: 30px !important;
+  }
+  #main_section {
+    .city-location {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: 0%;
+    }
+    .weather-section {
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
 
-  .select-cities {
-    width: 100%;
-    padding: 10px;
-    box-sizing: border-box;
-    border: 1px solid $borderColorSelector;
-    border-radius: 4px;
-    background-color: $backgroundColorSelector;
+      .weather-and-temp {
+        .weather-icon {
+          display: none;
+        }
+        h1 {
+          font-size: 120px !important;
+        }
+      }
 
-    .select-city {
-      padding: 10px;
-      cursor: pointer;
-
-      &:hover {
-        background-color: $hoverBgColorSelector;
+      .details {
+        width: 95%;
+        gap: 10px;
+        .col:nth-child(2),
+        .col:nth-child(4) {
+          display: none;
+        }
       }
     }
   }
-}
 
-.container-autocomplete {
-  position: relative;
-  height: 500px;
-  width: 20%;
-
-  .autocomplete-input {
-    width: 100%;
-    padding: 10px;
-    box-sizing: border-box;
-    border: 1px solid $borderColorSelector;
-    border-radius: 4px;
-    background-color: $backgroundColorSelector;
-  }
-
-  .autocomplete-cities {
-    position: absolute;
-    border: 1px solid $hoverBgColorSelector;
-    border-top: none;
-    z-index: 99;
-    background-color: $backgroundColorSelector;
-    max-height: fit-content;
-    width: 100%;
-
-    .autocomplete-city {
-      padding: 10px;
-      border: none;
-      cursor: pointer;
-
-      &:hover {
-        background-color: $hoverBgColorSelector;
-      }
+  #daily_section {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 5px;
+    div {
     }
   }
 }
-// END SELECTOR-SECTION

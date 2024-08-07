@@ -198,9 +198,21 @@ async function weatherRequest(obj) {
       let weatherIcon = document.getElementById("weather_icon");
       weatherIcon.src= getImgAndVideoWheather(result.current.weather_code[0]);
       const dates = result.daily.time;
+
+      var cityLocationWeather = document.getElementById('city_location-weather');
+        cityLocationWeather.addEventListener("click", function(){
+
+        var dayObj = {
+          latitude: latitude,
+          longitude: longitude,
+          time: result.daily.time[0]
+        }
+        changeHourlyWeather(dayObj);
+      });
       const days = dates.map(date =>{
         const day = new Date(date).toLocaleDateString("en-US",{weekday: "long"});
-        return day;
+        return day; 
+
       });
       /* first day after today */
       let minFirstDay = document.getElementById("min_first_day");

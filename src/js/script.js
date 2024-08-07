@@ -23,6 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
   main();
 });
 
+
 function main() {
   let autocompleteInput = document.getElementById("autocomplete_input");
   let autocompleteCities = document.getElementById("autocomplete_cities");
@@ -64,6 +65,9 @@ function main() {
         isSearching = false;
       });
     }
+
+    console.log(autocompleteInput.value)
+
   });
 
   document.addEventListener("click", (e) => {
@@ -186,33 +190,26 @@ async function weatherRequest(obj) {
       let wind = document.getElementById("wind");
       wind.innerHTML = result.current.wind_speed_10m + "Km/h";
       let highTemperature = document.getElementById("high_temperature");
-      highTemperature.innerHTML = result.current.apparent_temperature + "°C";
+      highTemperature.innerHTML = result.current.
+      apparent_temperature + "°C";
       let timeWeatherMax = document.getElementById("time_weather_max");
       timeWeatherMax.innerHTML = result.current.rain;
       let weatherIcon = document.getElementById("weather_icon");
-      weatherIcon.src = getImgAndVideoWheather(result.current.weather_code[0]);
-
+      weatherIcon.src= getImgAndVideoWheather(result.current.weather_code[0]);
       const dates = result.daily.time;
-      const days = dates.map((date) => {
-        const day = new Date(date).toLocaleDateString("en-US", {
-          weekday: "long",
-        });
+      const days = dates.map(date =>{
+        const day = new Date(date).toLocaleDateString("en-US",{weekday: "long"});
         return day;
       });
-
       /* first day after today */
       let minFirstDay = document.getElementById("min_first_day");
       minFirstDay.innerHTML = result.daily.temperature_2m_min[1] + "°C";
       let maxFirstDay = document.getElementById("max_first_day");
       maxFirstDay.innerHTML = result.daily.temperature_2m_max[1] + "°C";
-
       let firstWeatherImg = document.getElementById("first_weather_img");
-      firstWeatherImg.src = getImgAndVideoWheather(
-        result.daily.weather_code[1]
-      );
-
+      firstWeatherImg.src = getImgAndVideoWheather(result.daily.weather_code[1]);
       let firstDateWeather = document.getElementById("first_date_weather");
-      firstDateWeather.innerHTML = days[2];
+      firstDateWeather.innerHTML = days[1];
 
       var firstDayDaily = document.getElementById('first_day_daily');
       firstDayDaily.addEventListener("click", function(){
@@ -228,57 +225,38 @@ async function weatherRequest(obj) {
       minSecondDay.innerHTML = result.daily.temperature_2m_min[2] + "°C";
       let maxSecondDay = document.getElementById("max_second_day");
       maxSecondDay.innerHTML = result.daily.temperature_2m_max[2] + "°C";
-
       let secondWeatherImg = document.getElementById("second_weather_img");
-      secondWeatherImg.src = getImgAndVideoWheather(
-        result.daily.weather_code[2]
-      );
-
+      secondWeatherImg.src = getImgAndVideoWheather(result.daily.weather_code[2]);
       let secondDateWeather = document.getElementById("second_date_weather");
-      secondDateWeather.innerHTML = days[3];
-
+      secondDateWeather.innerHTML = days[2];
       /* third day after today */
       let minThirdDay = document.getElementById("min_third_day");
       minThirdDay.innerHTML = result.daily.temperature_2m_min[3] + "°C";
       let maxThirdDay = document.getElementById("max_third_day");
       maxThirdDay.innerHTML = result.daily.temperature_2m_max[3] + "°C";
-
       let thirdWeatherImg = document.getElementById("third_weather_img");
-      thirdWeatherImg.src = getImgAndVideoWheather(
-        result.daily.weather_code[3]
-      );
-
+      thirdWeatherImg.src = getImgAndVideoWheather(result.daily.weather_code[3]);
       let thirdDateWeather = document.getElementById("third_date_weather");
-      thirdDateWeather.innerHTML = days[4];
-
+      thirdDateWeather.innerHTML = days[3];
       /* fourth day after today */
       let minFourthDay = document.getElementById("min_fourth_day");
       minFourthDay.innerHTML = result.daily.temperature_2m_min[4] + "°C";
       let maxFourthDay = document.getElementById("max_fourth_day");
       maxFourthDay.innerHTML = result.daily.temperature_2m_max[4] + "°C";
-
       let fourthWeatherImg = document.getElementById("fourth_weather_img");
-      fourthWeatherImg.src = getImgAndVideoWheather(
-        result.daily.weather_code[4]
-      );
-
+      fourthWeatherImg.src = getImgAndVideoWheather(result.daily.weather_code[4]);
       let fourthDateWeather = document.getElementById("fourth_date_weather");
-      fourthDateWeather.innerHTML = days[5];
-
+      fourthDateWeather.innerHTML = days[4];
       /* fifth day after today */
       let minFifthDay = document.getElementById("min_fifth_day");
       minFifthDay.innerHTML = result.daily.temperature_2m_min[5] + "°C";
       let maxFifthDay = document.getElementById("max_fifth_day");
       maxFifthDay.innerHTML = result.daily.temperature_2m_max[5] + "°C";
-
       let fifthWeatherImg = document.getElementById("fifth_weather_img");
-      fifthWeatherImg.src = getImgAndVideoWheather(
-        result.daily.weather_code[5]
-      );
-
+      fifthWeatherImg.src = getImgAndVideoWheather(result.daily.weather_code[5]);
       let fifthDateWeather = document.getElementById("fifth_date_weather");
-      fifthDateWeather.innerHTML = days[6];
-
+      fifthDateWeather.innerHTML = days[5];
+      /*  */
       var hourlyContainer = document.getElementById("hourly_container");
       hourlyContainer.innerHTML = "";
 
@@ -286,7 +264,6 @@ async function weatherRequest(obj) {
       var current_temperatures = document.getElementById(
         "current_temperatures"
       );
-
       for (
         let index = 0;
         index < result.hourly.temperature_2m.length;
@@ -345,6 +322,8 @@ async function weatherRequest(obj) {
         hourlyContainer.append(newdiv);
         i = i + 2;
       }
+
+
     })
     .catch((error) => console.error(error));
 }

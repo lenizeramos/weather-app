@@ -3,26 +3,103 @@ document.addEventListener("DOMContentLoaded", () => {
   let longitude = document.getElementById("longitude");
   var obj = {};
 
-  getUserCurrentLocation()
-    .then((obj) => {
-      weatherRequest(obj);
-    })
-    .catch((error) => {
-      console.log(error);
-      obj = {
-        latitude: 49.2819,
-        longitude: -123.11874,
-        name: "Vancouver",
-        stateCode: "BC",
-        countryCode: "CA",
-        formattedAddress: "Vancouver, BC CA",
-      };
-      weatherRequest(obj);
-    });
-
+  setInitialCity();
   main();
+  favoriteCitiesList();
 });
 
+function setInitialCity() {
+  if (localStorage.getItem("currentCity")) {
+    let currentCity = JSON.parse(localStorage.getItem("currentCity"));
+    weatherRequest(currentCity);
+  } else {
+    getUserCurrentLocation()
+      .then((obj) => {
+        weatherRequest(obj);
+      })
+      .catch((error) => {
+        console.log(error);
+        obj = {
+          latitude: 49.2819,
+          longitude: -123.11874,
+          name: "Vancouver",
+          stateCode: "BC",
+          countryCode: "CA",
+          formattedAddress: "Vancouver, BC CA",
+        };
+        weatherRequest(obj);
+      });
+  }
+}
+function isFavorited(currentCity, favoriteCities) {
+  if (!favoriteCities) {
+    return false;
+  }
+  return favoriteCities.some(
+    (favoriteCity) =>
+      favoriteCity.formattedAddress === currentCity.formattedAddress
+  );
+}
+
+function loadFavoriteStar(currentCity) {
+  let favoriteStar = document.getElementById("favorite_star");
+  let favoriteCities = JSON.parse(localStorage.getItem("favoriteCities")) || [];
+
+  if (isFavorited(currentCity, favoriteCities)) {
+    favoriteStar.classList.add("favorited");
+  } else {
+    favoriteStar.classList.remove("favorited");
+  }
+
+  favoriteStarEvent(currentCity, favoriteStar, favoriteCities);
+}
+
+function favoriteStarEvent(currentCity, favoriteStar, favoriteCities) {
+  function toggleFavorite() {
+    if (isFavorited(currentCity, favoriteCities)) {
+      favoriteCities = favoriteCities.filter(
+        (city) => city.formattedAddress !== currentCity.formattedAddress
+      );
+      favoriteStar.classList.remove("favorited");
+    } else {
+      favoriteCities.push(currentCity);
+      favoriteStar.classList.add("favorited");
+    }
+
+    localStorage.setItem("favoriteCities", JSON.stringify(favoriteCities));
+    favoriteCitiesList();
+  }
+
+  favoriteStar.addEventListener("click", toggleFavorite);
+}
+
+function favoriteCitiesList() {
+  let selectCities = document.getElementById("select_cities");
+  let favoriteCities = JSON.parse(localStorage.getItem("favoriteCities")) || [];
+  selectCities.innerHTML = "";
+
+  let option = document.createElement("option");
+  option.textContent = "Favorite Cities";
+  option.classList.add("select-city");
+  option.value = "";
+  option.setAttribute("disabled", "true");
+  option.setAttribute("selected", "true");
+  selectCities.appendChild(option);
+
+  favoriteCities.forEach((city, index) => {
+    const option = document.createElement("option");
+    option.textContent = city.formattedAddress;
+    option.value = index;
+    option.classList.add("select-city");
+    selectCities.appendChild(option);
+  });
+
+  selectCities.addEventListener("change", (event) => {
+    const numericIndex = Number(event.target.value);
+
+    weatherRequest(favoriteCities[numericIndex]);
+  });
+}
 
 function main() {
   let autocompleteInput = document.getElementById("autocomplete_input");
@@ -54,6 +131,7 @@ function main() {
                 latitude: city.latitude,
                 longitude: city.longitude,
               };
+
               autocompleteInput.value = obj.formattedAddress;
               autocompleteCities.innerHTML = "";
 
@@ -101,19 +179,26 @@ function main() {
   }
 }
 async function getCityFromCoordinates(latitude, longitude) {
+  const myHeaders = new Headers();
+  myHeaders.append(
+    "Authorization",
+    "prj_test_pk_3d00dceaab6b3dd8142567ff19565bcf79df6489"
+  );
+
   const requestOptions = {
     method: "GET",
+    headers: myHeaders,
     redirect: "follow",
   };
-  const APIKey = "3e191f9af7e74b209bbcb2052cc15457";
 
   return fetch(
-    `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${APIKey}`,
+    `https://api.radar.io/v1/geocode/reverse?coordinates=${latitude},${longitude}`,
     requestOptions
   )
     .then((response) => response.json())
     .then((result) => {
-      return result.results[0].components;
+      console.log(result.addresses[0])
+      return result.addresses[0];
     })
     .catch((error) => console.error(error));
 }
@@ -134,9 +219,9 @@ function getUserCurrentLocation() {
 
           getCityFromCoordinates(obj.latitude, obj.longitude).then((city) => {
             obj.name = city.city;
-            obj.countryCode = city.country_code.toUpperCase();
-            console.log(city);
-            console.log(obj);
+            obj.stateCode = city.stateCode;
+            obj.countryCode = city.countryCode;
+            obj.formattedAddress = city.formattedAddress
             result(obj);
           });
         },
@@ -168,9 +253,12 @@ async function weatherRequest(obj) {
   let latitude = obj.latitude;
   let longitude = obj.longitude;
   let cityName = document.getElementById("city_name");
-  let favorite = document.getElementById("favorite");
 
-  cityName.textContent = obj.name;
+  cityName.textContent = `${obj.name}`;
+
+  loadFavoriteStar(obj);
+
+  localStorage.setItem("currentCity", JSON.stringify(obj));
 
   const requestOptions = {
     method: "GET",
@@ -180,9 +268,8 @@ async function weatherRequest(obj) {
     `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=America%2FLos_Angeles`,
     requestOptions
   )
-    .then((response) => response.text())
+    .then((response) => response.json())
     .then((result) => {
-      var result = JSON.parse(result);
       let tempH1 = document.getElementById("tempH1");
       console.log(result.current);
       tempH1.innerHTML = result.current.temperature_2m + "°C";

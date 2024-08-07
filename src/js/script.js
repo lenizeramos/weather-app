@@ -3,14 +3,9 @@ document.addEventListener("DOMContentLoaded", () => {
   let longitude = document.getElementById("longitude");
   var obj = {};
 
-  if (!localStorage.getItem("favoriteCities")) {
-    localStorage.setItem("favoriteCities", JSON.stringify([]));
-  }
-
   setInitialCity();
   main();
   favoriteCitiesList();
-  favoriteStarEvent();
 });
 
 function setInitialCity() {
@@ -36,26 +31,54 @@ function setInitialCity() {
       });
   }
 }
+function isFavorited(currentCity, favoriteCities) {
+  if (!favoriteCities) {
+    return false;
+  }
+  return favoriteCities.some(
+    (favoriteCity) =>
+      favoriteCity.formattedAddress === currentCity.formattedAddress
+  );
+}
 
-function favoriteStarEvent() {
+function loadFavoriteStar(currentCity) {
   let favoriteStar = document.getElementById("favorite_star");
-  let callback = () => {
-    favoriteStar.classList.toggle("favorited");
-    let currentCity = JSON.parse(localStorage.getItem("currentCity"));
-    let favoriteCities = JSON.parse(localStorage.getItem("favoriteCities"));
-    favoriteCities.push(currentCity);
+  let favoriteCities = JSON.parse(localStorage.getItem("favoriteCities")) || [];
+
+  if (isFavorited(currentCity, favoriteCities)) {
+    favoriteStar.classList.add("favorited");
+  } else {
+    favoriteStar.classList.remove("favorited");
+  }
+
+  favoriteStarEvent(currentCity, favoriteStar, favoriteCities);
+}
+
+function favoriteStarEvent(currentCity, favoriteStar, favoriteCities) {
+  function toggleFavorite() {
+    if (isFavorited(currentCity, favoriteCities)) {
+      favoriteCities = favoriteCities.filter(
+        (city) => city.formattedAddress !== currentCity.formattedAddress
+      );
+      favoriteStar.classList.remove("favorited");
+    } else {
+      favoriteCities.push(currentCity);
+      favoriteStar.classList.add("favorited");
+    }
+
     localStorage.setItem("favoriteCities", JSON.stringify(favoriteCities));
     favoriteCitiesList();
-  };
-  favoriteStar.removeEventListener("click", callback);
-  favoriteStar.addEventListener("click", callback);
+  }
+
+  favoriteStar.addEventListener("click", toggleFavorite);
 }
 
 function favoriteCitiesList() {
   let selectCities = document.getElementById("select_cities");
-  let favoriteCities = JSON.parse(localStorage.getItem("favoriteCities"));
-  let option = document.createElement("option");
+  let favoriteCities = JSON.parse(localStorage.getItem("favoriteCities")) || [];
   selectCities.innerHTML = "";
+
+  let option = document.createElement("option");
   option.textContent = "Favorite Cities";
   option.classList.add("select-city");
   option.value = "";
@@ -63,11 +86,18 @@ function favoriteCitiesList() {
   option.setAttribute("selected", "true");
   selectCities.appendChild(option);
 
-  favoriteCities.forEach((city) => {
+  favoriteCities.forEach((city, index) => {
     const option = document.createElement("option");
-    option.textContent = city.name;
+    option.textContent = city.formattedAddress;
+    option.value = index;
     option.classList.add("select-city");
     selectCities.appendChild(option);
+  });
+
+  selectCities.addEventListener("change", (event) => {
+    const numericIndex = Number(event.target.value);
+
+    weatherRequest(favoriteCities[numericIndex]);
   });
 }
 
@@ -101,6 +131,7 @@ function main() {
                 latitude: city.latitude,
                 longitude: city.longitude,
               };
+
               autocompleteInput.value = obj.formattedAddress;
               autocompleteCities.innerHTML = "";
 
@@ -166,7 +197,8 @@ async function getCityFromCoordinates(latitude, longitude) {
   )
     .then((response) => response.json())
     .then((result) => {
-      return result.addresses[0].formattedAddress;
+      console.log(result.addresses[0])
+      return result.addresses[0];
     })
     .catch((error) => console.error(error));
 }
@@ -189,8 +221,7 @@ function getUserCurrentLocation() {
             obj.name = city.city;
             obj.stateCode = city.stateCode;
             obj.countryCode = city.countryCode;
-            // console.log(city);
-            // console.log(obj);
+            obj.formattedAddress = city.formattedAddress
             result(obj);
           });
         },
@@ -223,7 +254,9 @@ async function weatherRequest(obj) {
   let longitude = obj.longitude;
   let cityName = document.getElementById("city_name");
 
-  cityName.textContent = obj.name;
+  cityName.textContent = `${obj.name}`;
+
+  loadFavoriteStar(obj);
 
   localStorage.setItem("currentCity", JSON.stringify(obj));
 

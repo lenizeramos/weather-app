@@ -33,9 +33,6 @@
             <option value="" disabled selected class="select-city">
               Favorite Cities
             </option>
-            <option value="option1" class="select-city">Option 1</option>
-            <option value="option2" class="select-city">Option 2</option>
-            <option value="option3" class="select-city">Option 3</option>
           </select>
         </div>
         <div class="container-autocomplete">
@@ -46,18 +43,14 @@
             placeholder="Search City"
             autocomplete="off"
           />
-          <input type="hidden" id="latitude" value="49.2819" />
-          <input type="hidden" id="longitude" value="-123.11874" />
+          
           <div id="autocomplete_cities" class="autocomplete-cities"></div>
         </div>
       </section>
 
       <section id="main_section">
         <div class="city-location glass-card flex-column">
-          <i
-            id="favorite"
-            class="fa-regular fa-star favorite-star"
-          ></i>
+          <i id="favorite_star" class="fa-regular fa-star favorite-star"></i>
           <h2 id="city_name" class="city"></h2>
           <div class="d-flex weather-main-container">
             <div class="weather-and-temp">

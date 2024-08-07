@@ -214,6 +214,15 @@ async function weatherRequest(obj) {
       let firstDateWeather = document.getElementById("first_date_weather");
       firstDateWeather.innerHTML = days[2];
 
+      var firstDayDaily = document.getElementById('first_day_daily');
+      firstDayDaily.addEventListener("click", function(){
+        console.log();
+        var dayObj = {
+          latitude: latitude,
+          longitude: longitude,
+        }
+      });
+
       /* second day after today */
       let minSecondDay = document.getElementById("min_second_day");
       minSecondDay.innerHTML = result.daily.temperature_2m_min[2] + "°C";
@@ -403,4 +412,62 @@ function getImgAndVideoWheather(value) {
   };
 
   return finalObj.image;
+}
+
+changeHourlyWeather();
+async function changeHourlyWeather(){
+  var latitude = "42.22";
+  var longitude = "43.22";
+
+  await fetch(
+    `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m,weather_code`)
+    .then((response) => response.text())
+    .then((result) => {
+      var result = JSON.parse(result);
+
+      console.log(result);
+
+      // for (let i = 0; i < 24; i++) {
+      //   var temp = result.hourly.temperature_2m[i];
+      //   var newdiv = document.createElement("div");
+
+      //   var day = document.createElement("h4");
+      //   day.innerHTML = result.hourly.time[i].split("T")[1];
+      //   day.classList.add("black-background");
+      //   day.setAttribute("style", "margin-bottom:0;");
+
+      //   var dayImage = document.createElement("img");
+      //   dayImage.width = 50;
+      //   dayImage.height = 50;
+      //   dayImageFunction = getImgAndVideoWheather(
+      //     result.hourly.weather_code[i]
+      //   );
+      //   dayImage.src = dayImageFunction;
+
+      //   var p = document.createElement("p");
+      //   p.innerHTML = temp + " °C";
+      //   p.classList.add("black-background");
+      //   p.setAttribute(
+      //     "style",
+      //     "font-size: 20px;margin-top:0;margin-bottom:0;"
+      //   );
+
+      //   var divContainer = document.createElement("div");
+      //   divContainer.setAttribute("style", "max-width: 100px;");
+      //   divContainer.classList.add("glass-card");
+      //   divContainer.append(dayImage);
+      //   divContainer.append(p);
+      //   divContainer.append(day);
+
+      //   newdiv.append(divContainer);
+      //   hourlyContainer.append(newdiv);
+      //   i = i + 2;
+      // }
+
+    })
+    .catch(error => console.log(error));
+
+
+
+  
 }

@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
   main();
 });
 
+
 function main() {
   let autocompleteInput = document.getElementById("autocomplete_input");
   let autocompleteCities = document.getElementById("autocomplete_cities");
@@ -51,7 +52,12 @@ function main() {
         isSearching = false;
       });
     }
+
+    console.log(autocompleteInput.value)
+
   });
+
+  localStorage.getItem("favorites","")
 
   async function fetchAutocompleteRadarApi(city, limit) {
     const myHeaders = new Headers();
@@ -139,7 +145,6 @@ async function weatherRequest (obj){
         timeWeatherMax.innerHTML = result.current.rain;
         let weatherIcon = document.getElementById("weather_icon");
         weatherIcon.src= getImgAndVideoWheather(result.current.weather_code[0]);
-        console.log(result);
         const dates = result.daily.time;
         const days = dates.map(date =>{
             const day = new Date(date).toLocaleDateString("en-US",{weekday: "long"});

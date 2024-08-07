@@ -194,7 +194,6 @@ main {
   align-items: center;
   position: relative;
   width: 400px;
-  height: 200px;
 }
 #main_section .city-location .favorite-star {
   position: absolute;
@@ -372,5 +371,8 @@ main {
     flex-wrap: nowrap;
     overflow-x: auto;
     gap: 5px;
+  }
+  #hourly_section #hourly_container {
+    overflow-x: auto;
   }
 }/*# sourceMappingURL=index.css.map */

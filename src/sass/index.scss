@@ -342,7 +342,7 @@ $backgroundColorSelector: #fff;
     width: 100%;
     gap: 10px;
     justify-content: space-around;
-    position: relative;
+    position: relative; 
 
     div div {
       height: 170px;
@@ -408,7 +408,10 @@ $backgroundColorSelector: #fff;
     flex-wrap: nowrap;
     overflow-x: auto;
     gap: 5px;
-    // div {
-    // }
+  }
+  #hourly_section{
+    #hourly_container{
+      overflow-x: auto;
+    }
   }
 }

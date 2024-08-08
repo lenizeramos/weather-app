@@ -186,6 +186,10 @@ main {
   background-color: #ddd;
 }
 
+.favorited {
+  color: #ffd43b;
+}
+
 #main_section {
   display: flex;
   flex-direction: column;

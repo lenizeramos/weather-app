@@ -3,26 +3,101 @@ document.addEventListener("DOMContentLoaded", () => {
   let longitude = document.getElementById("longitude");
   var obj = {};
 
-  getUserCurrentLocation()
-    .then((obj) => {
-      weatherRequest(obj);
-    })
-    .catch((error) => {
-      console.log(error);
-      obj = {
-        latitude: 49.2819,
-        longitude: -123.11874,
-        name: "Vancouver",
-        stateCode: "BC",
-        countryCode: "CA",
-        formattedAddress: "Vancouver, BC CA",
-      };
-      weatherRequest(obj);
-    });
-
+  setInitialCity();
   main();
+  favoriteCitiesList();
 });
 
+function setInitialCity() {
+  if (localStorage.getItem("currentCity")) {
+    let currentCity = JSON.parse(localStorage.getItem("currentCity"));
+    weatherRequest(currentCity);
+  } else {
+    getUserCurrentLocation()
+      .then((obj) => {
+        weatherRequest(obj);
+      })
+      .catch((error) => {
+        console.log(error);
+        obj = {
+          latitude: 49.2819,
+          longitude: -123.11874,
+          name: "Vancouver",
+          stateCode: "BC",
+          countryCode: "CA",
+          formattedAddress: "Vancouver, BC CA",
+        };
+        weatherRequest(obj);
+      });
+  }
+}
+function isFavorited(currentCity, favoriteCities) {
+  if (!favoriteCities) {
+    return false;
+  }
+  return favoriteCities.some(
+    (favoriteCity) =>
+      favoriteCity.formattedAddress === currentCity.formattedAddress
+  );
+}
+
+function loadFavoriteStar(currentCity) {
+  let favoriteStar = document.getElementById("favorite_star");
+  let favoriteCities = JSON.parse(localStorage.getItem("favoriteCities")) || [];
+
+  if (isFavorited(currentCity, favoriteCities)) {
+    favoriteStar.classList.add("favorited");
+  } else {
+    favoriteStar.classList.remove("favorited");
+  }
+
+  favoriteStarEvent(currentCity, favoriteStar, favoriteCities);
+}
+
+function favoriteStarEvent(currentCity, favoriteStar, favoriteCities) {
+  favoriteStar.addEventListener("click", () => {
+    if (isFavorited(currentCity, favoriteCities)) {
+      favoriteCities = favoriteCities.filter(
+        (city) => city.formattedAddress !== currentCity.formattedAddress
+      );
+      favoriteStar.classList.remove("favorited");
+    } else {
+      favoriteCities.push(currentCity);
+      favoriteStar.classList.add("favorited");
+    }
+
+    localStorage.setItem("favoriteCities", JSON.stringify(favoriteCities));
+    favoriteCitiesList();
+  });
+}
+
+function favoriteCitiesList() {
+  let selectCities = document.getElementById("select_cities");
+  let favoriteCities = JSON.parse(localStorage.getItem("favoriteCities")) || [];
+  selectCities.innerHTML = "";
+
+  let option = document.createElement("option");
+  option.textContent = "Favorite Cities";
+  option.classList.add("select-city");
+  option.value = "";
+  option.setAttribute("disabled", "true");
+  option.setAttribute("selected", "true");
+  selectCities.appendChild(option);
+
+  favoriteCities.forEach((city, index) => {
+    const option = document.createElement("option");
+    option.textContent = city.formattedAddress;
+    option.value = index;
+    option.classList.add("select-city");
+    selectCities.appendChild(option);
+  });
+
+  selectCities.addEventListener("change", (event) => {
+    const numericIndex = Number(event.target.value);
+
+    weatherRequest(favoriteCities[numericIndex]);
+  });
+}
 
 function main() {
   let autocompleteInput = document.getElementById("autocomplete_input");
@@ -54,6 +129,7 @@ function main() {
                 latitude: city.latitude,
                 longitude: city.longitude,
               };
+
               autocompleteInput.value = obj.formattedAddress;
               autocompleteCities.innerHTML = "";
 
@@ -65,9 +141,6 @@ function main() {
         isSearching = false;
       });
     }
-
-    console.log(autocompleteInput.value)
-
   });
 
   document.addEventListener("click", (e) => {
@@ -101,19 +174,25 @@ function main() {
   }
 }
 async function getCityFromCoordinates(latitude, longitude) {
+  const myHeaders = new Headers();
+  myHeaders.append(
+    "Authorization",
+    "prj_test_pk_3d00dceaab6b3dd8142567ff19565bcf79df6489"
+  );
+
   const requestOptions = {
     method: "GET",
+    headers: myHeaders,
     redirect: "follow",
   };
-  const APIKey = "3e191f9af7e74b209bbcb2052cc15457";
 
   return fetch(
-    `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${APIKey}`,
+    `https://api.radar.io/v1/geocode/reverse?coordinates=${latitude},${longitude}`,
     requestOptions
   )
     .then((response) => response.json())
     .then((result) => {
-      return result.results[0].components;
+      return result.addresses[0];
     })
     .catch((error) => console.error(error));
 }
@@ -134,9 +213,9 @@ function getUserCurrentLocation() {
 
           getCityFromCoordinates(obj.latitude, obj.longitude).then((city) => {
             obj.name = city.city;
-            obj.countryCode = city.country_code.toUpperCase();
-            console.log(city);
-            console.log(obj);
+            obj.stateCode = city.stateCode;
+            obj.countryCode = city.countryCode;
+            obj.formattedAddress = city.formattedAddress;
             result(obj);
           });
         },
@@ -168,9 +247,12 @@ async function weatherRequest(obj) {
   let latitude = obj.latitude;
   let longitude = obj.longitude;
   let cityName = document.getElementById("city_name");
-  let favorite = document.getElementById("favorite");
 
-  cityName.textContent = obj.name;
+  cityName.textContent = `${obj.name}`;
+
+  loadFavoriteStar(obj);
+
+  localStorage.setItem("currentCity", JSON.stringify(obj));
 
   const requestOptions = {
     method: "GET",
@@ -180,23 +262,20 @@ async function weatherRequest(obj) {
     `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=America%2FLos_Angeles`,
     requestOptions
   )
-    .then((response) => response.text())
+    .then((response) => response.json())
     .then((result) => {
-      var result = JSON.parse(result);
       let tempH1 = document.getElementById("tempH1");
-      console.log(result.current);
       tempH1.innerHTML = result.current.temperature_2m + "°C";
       let humidity = document.getElementById("humidity");
       humidity.innerHTML = result.current.relative_humidity_2m + "%";
       let wind = document.getElementById("wind");
       wind.innerHTML = result.current.wind_speed_10m + "Km/h";
       let highTemperature = document.getElementById("high_temperature");
-      highTemperature.innerHTML = result.current.
-      apparent_temperature + "°C";
+      highTemperature.innerHTML = result.current.apparent_temperature + "°C";
       let timeWeatherMax = document.getElementById("time_weather_max");
       timeWeatherMax.innerHTML = result.current.rain;
       let weatherIcon = document.getElementById("weather_icon");
-      weatherIcon.src= getImgAndVideoWheather(result.current.weather_code[0]);
+      weatherIcon.src = getImgAndVideoWheather(result.current.weather_code[0]);
       const dates = result.daily.time;
 
       var cityLocationWeather = document.getElementById('city_location-weather');
@@ -220,18 +299,19 @@ async function weatherRequest(obj) {
       let maxFirstDay = document.getElementById("max_first_day");
       maxFirstDay.innerHTML = result.daily.temperature_2m_max[1] + "°C";
       let firstWeatherImg = document.getElementById("first_weather_img");
-      firstWeatherImg.src = getImgAndVideoWheather(result.daily.weather_code[1]);
+      firstWeatherImg.src = getImgAndVideoWheather(
+        result.daily.weather_code[1]
+      );
       let firstDateWeather = document.getElementById("first_date_weather");
       firstDateWeather.innerHTML = days[2];
 
-      var firstDayDaily = document.getElementById('first_day_daily');
-      firstDayDaily.addEventListener("click", function(){
-
+      var firstDayDaily = document.getElementById("first_day_daily");
+      firstDayDaily.addEventListener("click", function () {
         var dayObj = {
           latitude: latitude,
           longitude: longitude,
-          time: result.daily.time[1]
-        }
+          time: result.daily.time[1],
+        };
         changeHourlyWeather(dayObj);
       });
 
@@ -241,18 +321,19 @@ async function weatherRequest(obj) {
       let maxSecondDay = document.getElementById("max_second_day");
       maxSecondDay.innerHTML = result.daily.temperature_2m_max[2] + "°C";
       let secondWeatherImg = document.getElementById("second_weather_img");
-      secondWeatherImg.src = getImgAndVideoWheather(result.daily.weather_code[2]);
+      secondWeatherImg.src = getImgAndVideoWheather(
+        result.daily.weather_code[2]
+      );
       let secondDateWeather = document.getElementById("second_date_weather");
       secondDateWeather.innerHTML = days[3];
 
-      var secondDayDaily = document.getElementById('second_day_daily');
-      secondDayDaily.addEventListener("click", function(){
-
+      var secondDayDaily = document.getElementById("second_day_daily");
+      secondDayDaily.addEventListener("click", function () {
         var dayObj = {
           latitude: latitude,
           longitude: longitude,
-          time: result.daily.time[2]
-        }
+          time: result.daily.time[2],
+        };
         changeHourlyWeather(dayObj);
       });
 
@@ -262,18 +343,19 @@ async function weatherRequest(obj) {
       let maxThirdDay = document.getElementById("max_third_day");
       maxThirdDay.innerHTML = result.daily.temperature_2m_max[3] + "°C";
       let thirdWeatherImg = document.getElementById("third_weather_img");
-      thirdWeatherImg.src = getImgAndVideoWheather(result.daily.weather_code[3]);
+      thirdWeatherImg.src = getImgAndVideoWheather(
+        result.daily.weather_code[3]
+      );
       let thirdDateWeather = document.getElementById("third_date_weather");
       thirdDateWeather.innerHTML = days[4];
 
-      var thirdDayDaily = document.getElementById('third_day_daily');
-      thirdDayDaily.addEventListener("click", function(){
-
+      var thirdDayDaily = document.getElementById("third_day_daily");
+      thirdDayDaily.addEventListener("click", function () {
         var dayObj = {
           latitude: latitude,
           longitude: longitude,
-          time: result.daily.time[3]
-        }
+          time: result.daily.time[3],
+        };
         changeHourlyWeather(dayObj);
       });
 
@@ -283,18 +365,19 @@ async function weatherRequest(obj) {
       let maxFourthDay = document.getElementById("max_fourth_day");
       maxFourthDay.innerHTML = result.daily.temperature_2m_max[4] + "°C";
       let fourthWeatherImg = document.getElementById("fourth_weather_img");
-      fourthWeatherImg.src = getImgAndVideoWheather(result.daily.weather_code[4]);
+      fourthWeatherImg.src = getImgAndVideoWheather(
+        result.daily.weather_code[4]
+      );
       let fourthDateWeather = document.getElementById("fourth_date_weather");
       fourthDateWeather.innerHTML = days[5];
 
-      var fourthDayDaily = document.getElementById('fourth_day_daily');
-      fourthDayDaily.addEventListener("click", function(){
-
+      var fourthDayDaily = document.getElementById("fourth_day_daily");
+      fourthDayDaily.addEventListener("click", function () {
         var dayObj = {
           latitude: latitude,
           longitude: longitude,
-          time: result.daily.time[4]
-        }
+          time: result.daily.time[4],
+        };
         changeHourlyWeather(dayObj);
       });
 
@@ -304,18 +387,19 @@ async function weatherRequest(obj) {
       let maxFifthDay = document.getElementById("max_fifth_day");
       maxFifthDay.innerHTML = result.daily.temperature_2m_max[5] + "°C";
       let fifthWeatherImg = document.getElementById("fifth_weather_img");
-      fifthWeatherImg.src = getImgAndVideoWheather(result.daily.weather_code[5]);
+      fifthWeatherImg.src = getImgAndVideoWheather(
+        result.daily.weather_code[5]
+      );
       let fifthDateWeather = document.getElementById("fifth_date_weather");
       fifthDateWeather.innerHTML = days[6];
 
-      var fifthDayDaily = document.getElementById('fifth_day_daily');
-      fifthDayDaily.addEventListener("click", function(){
-
+      var fifthDayDaily = document.getElementById("fifth_day_daily");
+      fifthDayDaily.addEventListener("click", function () {
         var dayObj = {
           latitude: latitude,
           longitude: longitude,
-          time: result.daily.time[5]
-        }
+          time: result.daily.time[5],
+        };
         changeHourlyWeather(dayObj);
       });
 
@@ -349,12 +433,7 @@ async function weatherRequest(obj) {
       cities = arrayHourly.join(" - ");
       current_temperatures.innerHTML = cities;
 
-      console.log("La página se crea");
-
       for (let i = 0; i < 24; i++) {
-
-        console.log(result.hourly);
-
         var temp = result.hourly.temperature_2m[i];
         var newdiv = document.createElement("div");
 
@@ -390,8 +469,6 @@ async function weatherRequest(obj) {
         hourlyContainer.append(newdiv);
         i = i + 2;
       }
-
-
     })
     .catch((error) => console.error(error));
 }
@@ -461,18 +538,17 @@ function getImgAndVideoWheather(value) {
   return finalObj.image;
 }
 
-async function changeHourlyWeather(obj){
+async function changeHourlyWeather(obj) {
   var latitude = obj.latitude;
   var longitude = obj.longitude;
   var objTime = obj.time;
 
   await fetch(
-    `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m,weather_code&timezone=America%2FLos_Angeles`)
+    `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m,weather_code&timezone=America%2FLos_Angeles`
+  )
     .then((response) => response.text())
     .then((result) => {
       var result = JSON.parse(result);
-
-      console.log(result.hourly);
 
       var hourlyContainer = document.getElementById("hourly_container");
       hourlyContainer.innerHTML = "";
@@ -482,17 +558,16 @@ async function changeHourlyWeather(obj){
       let weatherCodeArr = [];
 
       for (let index = 0; index < result.hourly.time.length; index++) {
-
-        if(result.hourly.time[index].includes(objTime)){
+        if (result.hourly.time[index].includes(objTime)) {
           temperatureArr.push(result.hourly.temperature_2m[index]);
           timeArr.push(result.hourly.time[index]);
-          weatherCodeArr.push(result.hourly.weather_code[index]); 
+          weatherCodeArr.push(result.hourly.weather_code[index]);
         }
       }
       var newObjHour = {
         temperature_2m: temperatureArr,
         time: timeArr,
-        weather_code: weatherCodeArr
+        weather_code: weatherCodeArr,
       };
 
       for (let i = 0; i < 24; i++) {
@@ -507,9 +582,7 @@ async function changeHourlyWeather(obj){
         var dayImage = document.createElement("img");
         dayImage.width = 50;
         dayImage.height = 50;
-        dayImageFunction = getImgAndVideoWheather(
-          newObjHour.weather_code[i]
-        );
+        dayImageFunction = getImgAndVideoWheather(newObjHour.weather_code[i]);
         dayImage.src = dayImageFunction;
 
         var p = document.createElement("p");
@@ -531,11 +604,6 @@ async function changeHourlyWeather(obj){
         hourlyContainer.append(newdiv);
         i = i + 2;
       }
-
     })
-    .catch(error => console.log(error));
-
-
-
-  
+    .catch((error) => console.log(error));
 }

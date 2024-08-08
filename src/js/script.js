@@ -55,7 +55,7 @@ function loadFavoriteStar(currentCity) {
 }
 
 function favoriteStarEvent(currentCity, favoriteStar, favoriteCities) {
-  function toggleFavorite() {
+  favoriteStar.addEventListener("click", () => {
     if (isFavorited(currentCity, favoriteCities)) {
       favoriteCities = favoriteCities.filter(
         (city) => city.formattedAddress !== currentCity.formattedAddress
@@ -68,9 +68,7 @@ function favoriteStarEvent(currentCity, favoriteStar, favoriteCities) {
 
     localStorage.setItem("favoriteCities", JSON.stringify(favoriteCities));
     favoriteCitiesList();
-  }
-
-  favoriteStar.addEventListener("click", toggleFavorite);
+  });
 }
 
 function favoriteCitiesList() {

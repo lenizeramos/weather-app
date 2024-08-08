@@ -264,6 +264,12 @@ async function weatherRequest(obj) {
   )
     .then((response) => response.json())
     .then((result) => {
+
+      let bodyBackground = document.getElementById("body");
+      bodyBackground.style.backgroundImage = getBackgroundImgBody(result.current.weather_code);
+      console.log(result.current.weather_code);
+
+
       let tempH1 = document.getElementById("tempH1");
       tempH1.innerHTML = result.current.temperature_2m + "°C";
       let humidity = document.getElementById("humidity");
@@ -275,7 +281,7 @@ async function weatherRequest(obj) {
       let timeWeatherMax = document.getElementById("time_weather_max");
       timeWeatherMax.innerHTML = result.current.rain;
       let weatherIcon = document.getElementById("weather_icon");
-      weatherIcon.src = getImgAndVideoWheather(result.current.weather_code[0]);
+      weatherIcon.src = getImgAndVideoWheather(result.current.weather_code);
       const dates = result.daily.time;
 
       var cityLocationWeather = document.getElementById('city_location-weather');
@@ -471,6 +477,71 @@ async function weatherRequest(obj) {
       }
     })
     .catch((error) => console.error(error));
+}
+
+function getBackgroundImgBody(value) {
+  switch (value) {
+    case 0:
+      var image = 'url("media/images/pexels-sunny.jpg")';
+      break;
+    case 1:
+    case 2:
+    case 3:
+      var image = 'url("media/images/pexels-partly-cloudy.jpg")';
+      break;
+    case 45:
+    case 48:
+      var image = 'url("media/images/pexels-fogging.jpg")';
+      break;
+    case 51:
+    case 53:
+    case 55:
+      var image = 'url("media/images/pexels-drizzle.jpg")';
+      break;
+    case 56:
+    case 57:
+      var image = 'url("media/images/pexels-snowing.jpg")';
+      break;
+    case 61:
+    case 63:
+    case 65:
+      var image = 'url("media/images/pexels-rainig.jpg")';
+      break;
+    case 66:
+    case 67:
+      var image = 'url("media/images/pexels-freezing rain.jpg")';
+      break;
+    case 71:
+    case 73:
+    case 75:
+      var image = 'url("media/images/pexels-snowing.jpg")';
+      break;
+    case 77:
+      var image = 'url("media/images/pexels-snowing.jpg")';
+      break;
+    case 80:
+    case 81:
+    case 82:
+      var image = 'url("media/images/pexels-raining.jpg")';
+      break;
+    case 85:
+    case 86:
+      var image = 'url("media/images/pexels-snowing.jpg")';
+      break;
+    case 95:
+    case 96:
+    case 99:
+      var image = 'url("media/images/pexels-storm.jpg")';
+      break;
+    default:
+      var image = 'url("media/images/pexels-clearly-sky.jpg")';
+      break;
+  }
+  let finalObj = {
+    image: image,
+  };
+
+  return finalObj.image;
 }
 
 function getImgAndVideoWheather(value) {

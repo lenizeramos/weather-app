@@ -4,12 +4,14 @@ html {
   padding: 0;
   box-sizing: border-box;
   overflow-x: hidden;
-  background-color: #081E64;
+}
+
+#body{
   background-repeat: no-repeat;
   background-size: cover;
-  
-/*   background: linear-gradient(45deg, #0E1E52 0%, #081E64 55%, #171D33 100%);
- */}
+  background-image: url("");
+}
+
 .d-flex {
   display: flex;
 }

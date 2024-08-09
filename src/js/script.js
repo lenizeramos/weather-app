@@ -249,6 +249,14 @@ function getUserCurrentLocation() {
   });
 }
 
+var locationDayObj;
+var cityLocationWeather = document.getElementById("city_location-weather");
+
+cityLocationWeather.addEventListener("click", function () {        
+    changeHourlyWeather(locationDayObj);
+});
+
+
 async function weatherRequest(obj) {
   let latitude = obj.latitude;
   let longitude = obj.longitude;
@@ -289,18 +297,12 @@ async function weatherRequest(obj) {
       weatherIcon.src = getImgAndVideoWheather(result.current.weather_code);
       const dates = result.daily.time;
 
-      var cityLocationWeather = document.getElementById(
-        "city_location-weather"
-      );
-      cityLocationWeather.addEventListener("click", function () {
-        console.log("click1")
-        var dayObj = {
-          latitude: latitude,
-          longitude: longitude,
-          time: result.daily.time[0],
-        };
-        changeHourlyWeather(dayObj);
-      });
+      locationDayObj = {
+        latitude: latitude,
+        longitude: longitude,
+        time: result.daily.time[0],
+      };
+      
       const days = dates.map((date) => {
         const day = new Date(date).toLocaleDateString("en-US", {
           weekday: "long",

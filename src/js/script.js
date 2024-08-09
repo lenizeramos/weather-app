@@ -290,7 +290,7 @@ async function weatherRequest(obj) {
       let wind = document.getElementById("wind");
       wind.innerHTML = result.current.wind_speed_10m + "Km/h";
       let highTemperature = document.getElementById("high_temperature");
-      highTemperature.innerHTML = result.current.wind_direction_10m + "°";
+      highTemperature.innerHTML = result.current.apparent_temperature + "°C";
       let windDirection = document.getElementById("wind_direction");
       windDirection.innerHTML = result.current.wind_direction_10m+ "°";
       let weatherIcon = document.getElementById("weather_icon");

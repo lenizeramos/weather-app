@@ -273,7 +273,7 @@ async function weatherRequest(obj) {
     redirect: "follow",
   };
   await fetch(
-    `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=America%2FLos_Angeles`,
+    `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m&current=is_day,wind_direction_10m&hourly=temperature_2m,relative_humidity_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=America%2FLos_Angeles`,
     requestOptions
   )
     .then((response) => response.json())
@@ -290,9 +290,9 @@ async function weatherRequest(obj) {
       let wind = document.getElementById("wind");
       wind.innerHTML = result.current.wind_speed_10m + "Km/h";
       let highTemperature = document.getElementById("high_temperature");
-      highTemperature.innerHTML = result.current.apparent_temperature + "°C";
-      let timeWeatherMax = document.getElementById("time_weather_max");
-      timeWeatherMax.innerHTML = result.current.rain;
+      highTemperature.innerHTML = result.current.wind_direction_10m + "°";
+      let windDirection = document.getElementById("wind_direction");
+      windDirection.innerHTML = result.current.wind_direction_10m+ "°";
       let weatherIcon = document.getElementById("weather_icon");
       weatherIcon.src = getImgAndVideoWheather(result.current.weather_code);
       const dates = result.daily.time;

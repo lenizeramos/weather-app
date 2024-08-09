@@ -174,7 +174,6 @@ main {
   border-top: none;
   z-index: 99;
   background-color: #fff;
-  max-height: -moz-fit-content;
   max-height: fit-content;
   width: 100%;
 }

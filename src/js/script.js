@@ -56,7 +56,6 @@ function loadFavoriteStar(currentCity) {
 
 function favoriteStarEvent(currentCity, favoriteStar, favoriteCities) {
   favoriteStar.addEventListener("click", () => {
-   
     if (isFavorited(currentCity, favoriteCities)) {
       favoriteCities = favoriteCities.filter(
         (city) => city.formattedAddress !== currentCity.formattedAddress
@@ -98,6 +97,11 @@ function favoriteCitiesList() {
   updateFavoriteCitiesList();
   let selectCities = document.getElementById("select_cities");
   selectCities.addEventListener("change", (event) => {
+    let autocompleteInput = document.getElementById("autocomplete_input");
+    let autocompleteCities = document.getElementById("autocomplete_cities");
+
+    autocompleteInput.value = "";
+    autocompleteCities.innerHTML = "";
     const numericIndex = Number(event.target.value);
 
     let favoriteCities = JSON.parse(localStorage.getItem("favoriteCities"));
@@ -127,6 +131,7 @@ function main() {
             div.textContent = city.formattedAddress;
             div.classList.add("autocomplete-city");
             div.addEventListener("click", () => {
+              updateFavoriteCitiesList();
               obj = {
                 name: city.city,
                 stateCode: city.stateCode,
@@ -252,10 +257,9 @@ function getUserCurrentLocation() {
 var locationDayObj;
 var cityLocationWeather = document.getElementById("city_location-weather");
 
-cityLocationWeather.addEventListener("click", function () {        
-    changeHourlyWeather(locationDayObj);
+cityLocationWeather.addEventListener("click", function () {
+  changeHourlyWeather(locationDayObj);
 });
-
 
 async function weatherRequest(obj) {
   let latitude = obj.latitude;
@@ -292,7 +296,7 @@ async function weatherRequest(obj) {
       let highTemperature = document.getElementById("high_temperature");
       highTemperature.innerHTML = result.current.apparent_temperature + "°C";
       let windDirection = document.getElementById("wind_direction");
-      windDirection.innerHTML = result.current.wind_direction_10m+ "°";
+      windDirection.innerHTML = result.current.wind_direction_10m + "°";
       let weatherIcon = document.getElementById("weather_icon");
       weatherIcon.src = getImgAndVideoWheather(result.current.weather_code);
       const dates = result.daily.time;
@@ -302,7 +306,7 @@ async function weatherRequest(obj) {
         longitude: longitude,
         time: result.daily.time[0],
       };
-      
+
       const days = dates.map((date) => {
         const day = new Date(date).toLocaleDateString("en-US", {
           weekday: "long",

@@ -82,10 +82,10 @@ html {
 
 nav {
   height: 60px;
-  background-color: #081E64;
   justify-content: space-between;
   align-items: center;
   padding: 10px;
+  background: linear-gradient(90deg, rgba(9, 9, 121, 0) 0%, rgba(9, 9, 121, 0) 39%, rgb(2, 0, 36) 107%);
 }
 nav .logo {
   font-size: 36px;
@@ -144,9 +144,10 @@ main {
   width: 100%;
   padding: 10px;
   box-sizing: border-box;
-  border: 1px solid #ccc;
+  border: none;
   border-radius: 4px;
   background-color: #fff;
+  cursor: pointer;
 }
 .container-favourite-cities .select-cities .select-city {
   padding: 10px;
@@ -154,6 +155,9 @@ main {
 }
 .container-favourite-cities .select-cities .select-city:hover {
   background-color: #ddd;
+}
+.container-favourite-cities .select-cities:hover {
+  border: 1px solid #081E64;
 }
 
 .container-autocomplete {
@@ -164,14 +168,15 @@ main {
   width: 100%;
   padding: 10px;
   box-sizing: border-box;
-  border: 1px solid #ccc;
+  border: none;
   border-radius: 4px;
   background-color: #fff;
 }
+.container-autocomplete .autocomplete-input:hover {
+  border: 1px solid #081E64;
+}
 .container-autocomplete .autocomplete-cities {
   position: absolute;
-  border: 1px solid #ddd;
-  border-top: none;
   z-index: 99;
   background-color: #fff;
   max-height: -moz-fit-content;
@@ -216,6 +221,9 @@ main {
 }
 #main_section .city-location i {
   font-size: 30px;
+}
+#main_section .city-location:hover {
+  border: solid 1px #081E64;
 }
 #main_section .weather-main-container {
   gap: 38px;
@@ -272,22 +280,23 @@ main {
   justify-content: space-around;
   width: 100%;
 }
-#daily_section div {
+#daily_section .glass-card {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 }
-#daily_section div h3 {
+#daily_section .glass-card h3 {
   font-size: 20px;
   margin: 0;
 }
-#daily_section div img {
+#daily_section .glass-card img {
   width: 60px;
   height: 60px;
   margin: 10px 0;
 }
-#daily_section div .max-min-temp {
+#daily_section .glass-card .max-min-temp {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -295,15 +304,18 @@ main {
   width: 100%;
   padding: 0;
 }
-#daily_section div .max-min-temp p {
+#daily_section .glass-card .max-min-temp p {
   font-size: 15px;
   margin: 0;
 }
-#daily_section div .max-min-temp img {
+#daily_section .glass-card .max-min-temp img {
   transform: rotate(90deg);
   width: 30px;
   height: 30px;
   margin: 0 5px;
+}
+#daily_section .glass-card:hover {
+  border: 1px solid #081E64;
 }
 
 .daily-title, .hourly-title {
@@ -314,7 +326,6 @@ main {
 }
 
 #hourly_section {
-  margin-top: 40px;
   display: flex;
   align-items: center;
   width: 100%;
@@ -337,8 +348,14 @@ main {
   padding: 8px;
   gap: 10px;
 }
+#hourly_section .hourly_container .glass-card:hover {
+  border: 1px solid #081E64;
+}
 
 @media only screen and (max-width: 600px) {
+  header nav .temperature-container {
+    display: none;
+  }
   .container-favourite-cities,
   .container-autocomplete {
     width: 45%;
@@ -346,16 +363,24 @@ main {
   .daily-title {
     font-size: 30px !important;
   }
+  #main_section {
+    margin-top: 20px;
+  }
   #main_section .city-location {
     display: flex;
     align-items: center;
     justify-content: center;
     margin-left: 0%;
     position: relative;
+    padding: 0 8px;
   }
   #main_section .city-location .favorite-star {
     position: absolute;
     top: 20px;
+  }
+  #main_section .city-location h2 {
+    font-size: 48px;
+    margin-top: 5px;
   }
   #main_section .weather-section {
     flex-direction: column;
@@ -380,8 +405,10 @@ main {
     flex-wrap: nowrap;
     overflow-x: auto;
     gap: 5px;
+    margin-left: 10px;
   }
   #hourly_section #hourly_container {
     overflow-x: auto;
+    margin-left: 17px;
   }
 }/*# sourceMappingURL=index.css.map */

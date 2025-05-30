@@ -1,8 +1,5 @@
 > **Note:** This repository is a personal backup of coursework originally developed as part of my studies at Cornerstone College. It was cloned from a institutional and private repository to preserve my contributions and development history.
 
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/OWA08RZI)
-# WAD202 - Mid Term - Weather App
-
 **Welcome!**
 This challenge will help you improve your coding skills by building realistic projects.
 
